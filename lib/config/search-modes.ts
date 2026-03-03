@@ -23,8 +23,8 @@ export const SEARCH_MODE_CONFIGS: SearchModeConfig[] = [
   },
   {
     value: 'adaptive',
-    label: 'アダプティブ',
-    description: 'インテリジェントなクエリ理解による適応型エージェント検索',
+    label: '検索エージェント',
+    description: '思考ステップ付きのエージェント検索',
     icon: IconLogoOutline,
     color: 'text-violet-500'
   }

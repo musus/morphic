@@ -11,14 +11,6 @@ const DEFAULT_MODEL: Model = {
   provider: 'OpenAI',
   providerId: 'openai',
   searchModeConfig: {
-    quick: {
-      providerOptions: {
-        openai: {
-          reasoningEffort: 'low',
-          reasoningSummary: 'auto'
-        }
-      }
-    },
     adaptive: {
       providerOptions: {
         openai: {
