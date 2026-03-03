@@ -394,7 +394,7 @@ export function ResearchProcessSection({
                   className="flex items-center px-1 py-0.5 gap-2 text-sm rounded-lg group"
                 >
                   <span className="font-medium text-muted-foreground group-hover:text-muted-foreground/70">
-                    Research Process ({totalParts} steps)
+                    リサーチ過程（{totalParts}ステップ）
                   </span>
                   <ChevronDown
                     className={cn(

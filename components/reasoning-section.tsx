@@ -73,12 +73,12 @@ export function ReasoningSection({
   }, [content.reasoning, content.isDone])
 
   const headerLabel = isOpen
-    ? 'Thoughts'
+    ? '思考'
     : preview && preview.length > 0
       ? preview
       : !content.isDone
-        ? 'Thinking...'
-        : 'Thoughts'
+        ? '思考中...'
+        : '思考'
 
   const reasoningHeader = (
     <ProcessHeader
