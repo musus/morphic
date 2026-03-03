@@ -45,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
               size="sm"
               onClick={() => setFeedbackOpen(true)}
             >
-              Feedback
+              フィードバック
             </Button>
           )}
           {user ? <UserMenu user={user} /> : <GuestMenu />}

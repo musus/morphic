@@ -32,7 +32,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
 
   const handleSubmit = () => {
     if (!sentiment || !message.trim()) {
-      toast.error('Please select your sentiment and write a message')
+      toast.error('評価を選択し、メッセージを入力してください')
       return
     }
 
@@ -44,13 +44,13 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
       })
 
       if (result.success) {
-        toast.success('Thank you for your feedback!')
+        toast.success('フィードバックをお送りいただきありがとうございます！')
         // Reset form and close modal
         setSentiment(null)
         setMessage('')
         onOpenChange(false)
       } else {
-        toast.error('Failed to submit feedback. Please try again later.')
+        toast.error('フィードバックの送信に失敗しました。後でもう一度お試しください。')
       }
     })
   }
@@ -65,9 +65,9 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle>Give feedback</DialogTitle>
+          <DialogTitle>フィードバック</DialogTitle>
           <DialogDescription>
-            Your feedback helps us improve Morphic. Let us know what you think!
+            ご意見をお聞かせください。サービスの改善に役立てます。
           </DialogDescription>
         </DialogHeader>
 
@@ -112,7 +112,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
           </div>
 
           <Textarea
-            placeholder="Your feedback"
+            placeholder="フィードバックを入力してください"
             value={message}
             onChange={e => setMessage(e.target.value)}
             className="min-h-[150px] resize-none"
@@ -125,14 +125,14 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
               onClick={handleCancel}
               disabled={isPending}
             >
-              Cancel
+              キャンセル
             </Button>
             <Button
               type="button"
               onClick={handleSubmit}
               disabled={isPending || !sentiment || !message.trim()}
             >
-              {isPending ? 'Submitting...' : 'Submit'}
+              {isPending ? '送信中...' : '送信'}
             </Button>
           </div>
         </div>

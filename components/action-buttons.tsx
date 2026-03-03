@@ -27,61 +27,61 @@ interface ActionCategory {
 const actionCategories: ActionCategory[] = [
   {
     icon: Search,
-    label: 'Research',
+    label: 'リサーチ',
     key: 'research'
   },
   {
     icon: Scale,
-    label: 'Compare',
+    label: '比較',
     key: 'compare'
   },
   {
     icon: Newspaper,
-    label: 'Latest',
+    label: '最新ニュース',
     key: 'latest'
   },
   {
     icon: FileText,
-    label: 'Summarize',
+    label: '要約',
     key: 'summarize'
   },
   {
     icon: HelpCircle,
-    label: 'Explain',
+    label: '解説',
     key: 'explain'
   }
 ]
 
 const promptSamples: Record<string, string[]> = {
   research: [
-    'Why is Nvidia growing so rapidly?',
-    'Research the latest AI developments',
-    'What are the key trends in robotics?',
-    'What are the latest breakthroughs in renewable energy?'
+    'Nvidiaが急成長している理由は？',
+    '最新のAI技術の動向を調べて',
+    'ロボティクスの主要トレンドは？',
+    '再生可能エネルギーの最新ブレイクスルーは？'
   ],
   compare: [
-    'Tesla vs BYD vs Toyota comparison',
-    'Compare Next.js, Remix, and Astro',
+    'Tesla vs BYD vs トヨタの比較',
+    'Next.js、Remix、Astroを比較して',
     'AWS vs GCP vs Azure',
-    'iPhone vs Android ecosystem comparison'
+    'iPhone vs Androidエコシステムの比較'
   ],
   latest: [
-    'Latest news today',
-    'What happened in tech this week?',
-    'Recent breakthroughs in medicine',
-    'Latest AI model releases'
+    '今日の最新ニュース',
+    '今週のテック業界の出来事は？',
+    '医療分野の最近のブレイクスルー',
+    '最新のAIモデルリリース情報'
   ],
   summarize: [
-    'Summarize: https://arxiv.org/pdf/2504.19678',
-    "Summarize this week's business news",
-    'Create an executive summary of AI trends',
-    'Summarize recent climate change research'
+    '要約して: https://arxiv.org/pdf/2504.19678',
+    '今週のビジネスニュースを要約して',
+    'AIトレンドのエグゼクティブサマリーを作成して',
+    '最近の気候変動研究を要約して'
   ],
   explain: [
-    'Explain neural networks simply',
-    'How does blockchain work?',
-    'What is quantum entanglement?',
-    'Explain CRISPR gene editing'
+    'ニューラルネットワークをわかりやすく説明して',
+    'ブロックチェーンの仕組みは？',
+    '量子もつれとは何か？',
+    'CRISPR遺伝子編集について説明して'
   ]
 }
 

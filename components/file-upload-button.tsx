@@ -37,7 +37,7 @@ export function FileUploadButton({
 
     if (rejected.length > 0) {
       toast.error(
-        'Some files were not accepted: ' + rejected.map(f => f.name).join(', ')
+        '次のファイルは受け付けられませんでした: ' + rejected.map(f => f.name).join(', ')
       )
     }
 
@@ -65,7 +65,7 @@ export function FileUploadButton({
         'relative rounded-full',
         isDragging && 'ring-2 ring-blue-500 ring-offset-2'
       )}
-      title="Drag and drop or click to upload"
+      title="ドラッグ＆ドロップまたはクリックしてアップロード"
     >
       <input
         ref={inputRef}

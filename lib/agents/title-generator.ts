@@ -23,10 +23,10 @@ export async function generateChatTitle({
   parentTraceId
 }: GenerateChatTitleParams): Promise<string> {
   // Fallback title uses the first 75 characters of the message or a default string.
-  const fallbackTitle = userMessageContent.substring(0, 75).trim() || 'New Chat'
+  const fallbackTitle = userMessageContent.substring(0, 75).trim() || '新しいチャット'
 
   try {
-    const systemPrompt = `System: You are an AI assistant specialized in creating very short, concise, and informative titles for chat conversations based on the user's first message. The title should ideally be 3-5 words long, and no more than 10 words. Only output the title itself, with no prefixes, labels, or quotation marks.`
+    const systemPrompt = `System: You are an AI assistant specialized in creating very short, concise, and informative titles for chat conversations based on the user's first message. The title MUST be generated in Japanese (日本語). The title should ideally be 3-5 words long, and no more than 10 words. Only output the title itself, with no prefixes, labels, or quotation marks.`
 
     const { text: generatedTitle } = await generateText({
       model: getModel(modelId),

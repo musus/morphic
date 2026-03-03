@@ -30,21 +30,21 @@ export default function GuestMenu() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="h-6 w-6">
           <Settings2 className="h-4 w-4" /> {/* Choose an icon */}
-          <span className="sr-only">Open menu</span>
+          <span className="sr-only">メニューを開く</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuItem asChild>
           <Link href="/auth/login">
             <LogIn className="mr-2 h-4 w-4" />
-            <span>Sign In</span>
+            <span>ログイン</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Palette className="mr-2 h-4 w-4" />
-            <span>Theme</span>
+            <span>テーマ</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <ThemeMenuItems />
@@ -53,7 +53,7 @@ export default function GuestMenu() {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Link2 className="mr-2 h-4 w-4" />
-            <span>Links</span>
+            <span>リンク</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <ExternalLinkItems />

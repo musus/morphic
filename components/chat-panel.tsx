@@ -182,7 +182,7 @@ export function ChatPanel({
             size="icon"
             className="absolute -top-10 right-4 z-20 size-8 rounded-full shadow-md"
             onClick={handleScrollToBottom}
-            title="Scroll to bottom"
+            title="一番下にスクロール"
           >
             <ChevronDown size={16} />
           </Button>
@@ -205,7 +205,7 @@ export function ChatPanel({
             onCompositionEnd={handleCompositionEnd}
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
-            placeholder="Ask anything..."
+            placeholder="なんでも聞いてください..."
             spellCheck={false}
             value={input}
             disabled={isLoading || isToolInvocationInProgress()}

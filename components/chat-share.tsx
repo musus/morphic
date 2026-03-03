@@ -40,7 +40,7 @@ export function ChatShare({ chatId, className }: ChatShareProps) {
     const sharedChatObject = await shareChat(chatId)
     if (!sharedChatObject) {
       toast.error(
-        'Failed to make chat public. You may need to be logged in or own the chat.'
+        'チャットの公開に失敗しました。ログインしているか、チャットの所有者であることを確認してください。'
       )
       return
     }
@@ -55,10 +55,10 @@ export function ChatShare({ chatId, className }: ChatShareProps) {
   const handleCopy = () => {
     if (shareUrl) {
       copyToClipboard(shareUrl)
-      toast.success('Link copied to clipboard')
+      toast.success('リンクをコピーしました')
       setOpen(false)
     } else {
-      toast.error('No link to copy')
+      toast.error('コピーするリンクがありません')
     }
   }
 
@@ -82,21 +82,20 @@ export function ChatShare({ chatId, className }: ChatShareProps) {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Share Chat</DialogTitle>
+            <DialogTitle>チャットを共有</DialogTitle>
             <DialogDescription>
-              Anyone with the link will be able to view this chat if it&apos;s
-              public.
+              リンクを知っている人は、公開されたチャットを閲覧できます。
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="items-center">
             {!shareUrl && (
               <Button onClick={handleShare} disabled={pending} size="sm">
-                {pending ? <Spinner /> : 'Get link'}
+                {pending ? <Spinner /> : 'リンクを取得'}
               </Button>
             )}
             {shareUrl && (
               <Button onClick={handleCopy} disabled={pending} size="sm">
-                {'Copy link'}
+                {'リンクをコピー'}
               </Button>
             )}
           </DialogFooter>

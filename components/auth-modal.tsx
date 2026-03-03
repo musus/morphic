@@ -34,18 +34,18 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
             </span>
           </div>
           <DialogTitle className="text-xl font-semibold">
-            Continue with techless
+            techlessを続ける
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            To use techless, sign in to your account or create a new one.
+            techlessを利用するには、アカウントにログインするか新規登録してください。
           </DialogDescription>
         </DialogHeader>
         <div className="mt-6 space-y-3">
           <Button asChild className="w-full" size="lg">
-            <Link href="/auth/sign-up">Sign Up</Link>
+            <Link href="/auth/sign-up">新規登録</Link>
           </Button>
           <Button asChild variant="outline" className="w-full" size="lg">
-            <Link href="/auth/login">Sign In</Link>
+            <Link href="/auth/login">ログイン</Link>
           </Button>
         </div>
       </DialogContent>

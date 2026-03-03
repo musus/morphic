@@ -23,6 +23,7 @@ export class SearXNGSearchProvider extends BaseSearchProvider {
       const url = new URL(`${apiUrl}/search`)
       url.searchParams.append('q', query)
       url.searchParams.append('format', 'json')
+      url.searchParams.append('language', 'ja')
       url.searchParams.append('categories', 'general,images')
 
       // Apply search depth settings

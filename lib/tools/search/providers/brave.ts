@@ -112,7 +112,7 @@ export class BraveSearchProvider implements SearchProvider {
       const response = await fetch(
         `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(
           query
-        )}&count=${maxResults}`,
+        )}&count=${maxResults}&search_lang=ja&country=jp`,
         {
           headers: {
             Accept: 'application/json',
@@ -149,7 +149,7 @@ export class BraveSearchProvider implements SearchProvider {
       const response = await fetch(
         `https://api.search.brave.com/res/v1/videos/search?q=${encodeURIComponent(
           query
-        )}&count=${maxResults}`,
+        )}&count=${maxResults}&search_lang=ja&country=jp`,
         {
           headers: {
             Accept: 'application/json',
@@ -196,7 +196,7 @@ export class BraveSearchProvider implements SearchProvider {
       const response = await fetch(
         `https://api.search.brave.com/res/v1/images/search?q=${encodeURIComponent(
           query
-        )}&count=${maxResults}`,
+        )}&count=${maxResults}&search_lang=ja&country=jp`,
         {
           headers: {
             Accept: 'application/json',

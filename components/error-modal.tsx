@@ -53,13 +53,13 @@ export function ErrorModal({
   const getErrorTitle = () => {
     switch (error.type) {
       case 'rate-limit':
-        return 'Rate Limit Exceeded'
+        return 'リクエスト制限に達しました'
       case 'auth':
-        return 'Continue with Morphic'
+        return 'Morphicを続ける'
       case 'forbidden':
-        return 'Access Denied'
+        return 'アクセスが拒否されました'
       default:
-        return 'Error Occurred'
+        return 'エラーが発生しました'
     }
   }
 
@@ -68,22 +68,22 @@ export function ErrorModal({
       case 'rate-limit':
         return (
           error.message ||
-          'You have made too many requests. Please wait a moment before trying again.'
+          'リクエストが多すぎます。しばらくしてからもう一度お試しください。'
         )
       case 'auth':
-        return 'To use Morphic, sign in to your account or create a new one.'
+        return 'Morphicを利用するには、アカウントにログインするか新規登録してください。'
       case 'forbidden':
-        return 'You do not have permission to access this resource.'
+        return 'このリソースへのアクセス権限がありません。'
       default:
         return (
-          error.message || 'An unexpected error occurred. Please try again.'
+          error.message || '予期しないエラーが発生しました。もう一度お試しください。'
         )
     }
   }
 
   const getErrorDetails = () => {
     if (error.type === 'rate-limit') {
-      return 'The limit will reset at midnight UTC. You can continue using speed mode without restrictions.'
+      return '制限はUTC午前0時にリセットされます。スピードモードは引き続き制限なくご利用いただけます。'
     }
     return error.details
   }
@@ -120,10 +120,10 @@ export function ErrorModal({
           {error.type === 'auth' ? (
             <>
               <Button asChild className="w-full">
-                <Link href="/auth/sign-up">Sign Up</Link>
+                <Link href="/auth/sign-up">新規登録</Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link href="/auth/login">Sign In</Link>
+                <Link href="/auth/login">ログイン</Link>
               </Button>
             </>
           ) : (
@@ -137,7 +137,7 @@ export function ErrorModal({
                   className="w-full"
                 >
                   <RefreshCw className="mr-2 size-4" />
-                  Try Again
+                  再試行
                 </Button>
               )}
               <Button
@@ -147,7 +147,7 @@ export function ErrorModal({
                 onClick={() => onOpenChange(false)}
                 className="w-full"
               >
-                {error.type === 'rate-limit' ? 'Understood' : 'Close'}
+                {error.type === 'rate-limit' ? '了解' : '閉じる'}
               </Button>
             </>
           )}

@@ -23,7 +23,7 @@ const fontSans = FontSans({
 
 const title = 'techless'
 const description =
-  'A fully open-source AI-powered answer engine with a generative UI.'
+  'AI搭載のオープンソース検索エンジン'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://morphic.sh'),
@@ -66,7 +66,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ja" suppressHydrationWarning>
       <body
         className={cn(
           'min-h-screen flex flex-col font-sans antialiased overflow-hidden',

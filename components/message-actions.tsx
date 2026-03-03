@@ -60,7 +60,7 @@ export function MessageActions({
 
   async function handleCopy() {
     await navigator.clipboard.writeText(mappedMessage)
-    toast.success('Message copied to clipboard')
+    toast.success('メッセージをコピーしました')
   }
 
   async function handleFeedback(score: number) {
@@ -82,16 +82,16 @@ export function MessageActions({
         setFeedbackScore(score)
         toast.success(
           score === 1
-            ? 'Thanks for the feedback!'
-            : 'Thanks for letting us know!'
+            ? 'フィードバックありがとうございます！'
+            : 'ご報告ありがとうございます！'
         )
       } else {
         console.error('Failed to submit feedback')
-        toast.error('Failed to submit feedback')
+        toast.error('フィードバックの送信に失敗しました')
       }
     } catch (error) {
       console.error('Error submitting feedback:', error)
-      toast.error('Failed to submit feedback')
+      toast.error('フィードバックの送信に失敗しました')
     } finally {
       setIsSubmittingFeedback(false)
     }

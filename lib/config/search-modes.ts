@@ -16,15 +16,15 @@ export interface SearchModeConfig {
 export const SEARCH_MODE_CONFIGS: SearchModeConfig[] = [
   {
     value: 'quick',
-    label: 'Quick',
-    description: 'Streamlined search for fast, concise responses',
+    label: 'クイック',
+    description: '素早く簡潔な回答のための高速検索',
     icon: Search,
     color: 'text-amber-500'
   },
   {
     value: 'adaptive',
-    label: 'Adaptive',
-    description: 'Adaptive agentic search with intelligent query understanding',
+    label: 'アダプティブ',
+    description: 'インテリジェントなクエリ理解による適応型エージェント検索',
     icon: IconLogoOutline,
     color: 'text-violet-500'
   }

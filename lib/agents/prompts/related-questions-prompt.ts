@@ -1,7 +1,9 @@
 export const RELATED_QUESTIONS_PROMPT = `You are a professional web researcher tasked with generating follow-up questions. 
 
 Language:
-- ALWAYS generate questions in the user's language.
+- ALWAYS generate questions in Japanese (日本語).
+- 日本のユーザーにとって関連性の高い質問を生成すること。
+- 日本語として自然で簡潔な表現を使うこと。
 
 Based on the conversation history and search results, create 3 CONCISE related questions that:
 

@@ -36,7 +36,7 @@ export function SignUpForm({
     setError(null)
 
     if (password !== repeatPassword) {
-      setError('Passwords do not match')
+      setError('パスワードが一致しません')
       setIsLoading(false)
       return
     }
@@ -76,17 +76,17 @@ export function SignUpForm({
             >
               techless
             </span>
-            Create an account
+            アカウント作成
           </CardTitle>
           <CardDescription>
-            Enter your details below to get started
+            以下の情報を入力してください
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">メールアドレス</Label>
                 <Input
                   id="email"
                   type="email"
@@ -98,7 +98,7 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">パスワード</Label>
                 </div>
                 <PasswordInput
                   id="password"
@@ -111,7 +111,7 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
+                  <Label htmlFor="repeat-password">パスワード（確認）</Label>
                 </div>
                 <PasswordInput
                   id="repeat-password"
@@ -124,13 +124,13 @@ export function SignUpForm({
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating account...' : 'Sign Up'}
+                {isLoading ? 'アカウント作成中...' : '新規登録'}
               </Button>
             </div>
             <div className="mt-6 text-center text-sm">
-              Already have an account?{' '}
+              すでにアカウントをお持ちの方{' '}
               <Link href="/auth/login" className="underline underline-offset-4">
-                Sign In
+                ログイン
               </Link>
             </div>
           </form>
@@ -138,7 +138,7 @@ export function SignUpForm({
       </Card>
       <div className="text-center text-xs text-muted-foreground">
         <Link href="/" className="hover:underline">
-          &larr; Back to Home
+          &larr; ホームに戻る
         </Link>
       </div>
     </div>

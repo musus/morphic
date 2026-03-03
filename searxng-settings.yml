@@ -31,5 +31,6 @@ server:
     Referrer-Policy: no-referrer
 
 search:
+  default_lang: ja
   formats:
     - json
