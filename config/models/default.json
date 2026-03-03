@@ -3,19 +3,27 @@
   "models": {
     "available": [
       {
-        "id": "gpt-5-mini",
-        "name": "GPT-5 mini",
+        "id": "gpt-5-nano",
+        "name": "GPT-5 Nano",
         "provider": "OpenAI",
         "providerId": "openai",
         "searchModeConfig": {
-          "quick": {
+          "adaptive": {
             "providerOptions": {
               "openai": {
                 "reasoningEffort": "low",
                 "reasoningSummary": "auto"
               }
             }
-          },
+          }
+        }
+      },
+      {
+        "id": "gpt-5-mini",
+        "name": "GPT-5 mini",
+        "provider": "OpenAI",
+        "providerId": "openai",
+        "searchModeConfig": {
           "adaptive": {
             "providerOptions": {
               "openai": {
@@ -27,19 +35,17 @@
         }
       },
       {
+        "id": "gpt-4.1-mini",
+        "name": "GPT-4.1 mini",
+        "provider": "OpenAI",
+        "providerId": "openai"
+      },
+      {
         "id": "gpt-5.2",
         "name": "GPT-5.2",
         "provider": "OpenAI",
         "providerId": "openai",
         "searchModeConfig": {
-          "quick": {
-            "providerOptions": {
-              "openai": {
-                "reasoningEffort": "low",
-                "reasoningSummary": "auto"
-              }
-            }
-          },
           "adaptive": {
             "providerOptions": {
               "openai": {
@@ -63,6 +69,12 @@
         "providerId": "anthropic"
       },
       {
+        "id": "gemini-2.5-flash",
+        "name": "Gemini 2.5 Flash",
+        "provider": "Google",
+        "providerId": "google"
+      },
+      {
         "id": "gemini-3-flash-preview",
         "name": "Gemini 3 Flash",
         "provider": "Google",
@@ -73,6 +85,27 @@
         "name": "Gemini 3.1 Pro",
         "provider": "Google",
         "providerId": "google"
+      },
+      {
+        "id": "meta-llama/llama-4-maverick-17b-128e-instruct",
+        "name": "Llama 4 Maverick",
+        "provider": "Meta (Groq)",
+        "providerId": "groq",
+        "providerIcon": "meta"
+      },
+      {
+        "id": "qwen/qwen3-32b",
+        "name": "Qwen 3 32B",
+        "provider": "Alibaba (Groq)",
+        "providerId": "groq",
+        "providerIcon": "qwen"
+      },
+      {
+        "id": "llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B",
+        "provider": "Meta (Groq)",
+        "providerId": "groq",
+        "providerIcon": "meta"
       }
     ],
     "defaultModelId": "gpt-5-mini",

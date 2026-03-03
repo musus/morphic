@@ -13,13 +13,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
-import { IconAnthropic, IconGoogle, IconOpenAI } from './ui/icons'
+import {
+  IconAnthropic,
+  IconGoogle,
+  IconMeta,
+  IconOpenAI,
+  IconQwen
+} from './ui/icons'
 
 interface ModelOption {
   id: string
   name: string
   provider: string
   providerId: string
+  providerIcon?: string
 }
 
 const PROVIDER_ICONS: Record<
@@ -28,17 +35,21 @@ const PROVIDER_ICONS: Record<
 > = {
   openai: IconOpenAI,
   anthropic: IconAnthropic,
-  google: IconGoogle
+  google: IconGoogle,
+  meta: IconMeta,
+  qwen: IconQwen
 }
 
 function ProviderIcon({
   providerId,
+  providerIcon,
   className
 }: {
   providerId: string
+  providerIcon?: string
   className?: string
 }) {
-  const Icon = PROVIDER_ICONS[providerId]
+  const Icon = PROVIDER_ICONS[providerIcon ?? providerId]
   if (!Icon) return null
   return <Icon className={className} />
 }
@@ -95,6 +106,7 @@ export function ModelSelector({ disabled = false }: { disabled?: boolean }) {
           {selectedModel && (
             <ProviderIcon
               providerId={selectedModel.providerId}
+              providerIcon={selectedModel.providerIcon}
               className="h-3.5 w-3.5 opacity-70"
             />
           )}
@@ -126,6 +138,7 @@ export function ModelSelector({ disabled = false }: { disabled?: boolean }) {
               </div>
               <ProviderIcon
                 providerId={model.providerId}
+                providerIcon={model.providerIcon}
                 className="h-4 w-4 shrink-0 opacity-60"
               />
               <div className="flex flex-col min-w-0">

@@ -111,7 +111,9 @@ export function createResearcher({
       default:
         systemPrompt = ADAPTIVE_MODE_PROMPT
         activeToolsList = ['search', 'fetch']
-        if (writer && 'todoWrite' in todoTools) {
+        // Skip todoWrite for models with limited tool calling (e.g., Groq-hosted OSS models)
+        // to avoid "Failed to call a function" errors from complex nested schemas
+        if (writer && 'todoWrite' in todoTools && !model.startsWith('groq:')) {
           activeToolsList.push('todoWrite')
         }
         console.log(
