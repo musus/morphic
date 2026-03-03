@@ -1,6 +1,12 @@
 import { relations } from 'drizzle-orm'
 
-import { chats, messages, parts } from './schema'
+import {
+  chats,
+  messages,
+  parts,
+  promptFavorites,
+  promptTemplates
+} from './schema'
 
 export const chatsRelations = relations(chats, ({ many }) => ({
   messages: many(messages)
@@ -20,3 +26,20 @@ export const partsRelations = relations(parts, ({ one }) => ({
     references: [messages.id]
   })
 }))
+
+export const promptTemplatesRelations = relations(
+  promptTemplates,
+  ({ many }) => ({
+    favorites: many(promptFavorites)
+  })
+)
+
+export const promptFavoritesRelations = relations(
+  promptFavorites,
+  ({ one }) => ({
+    template: one(promptTemplates, {
+      fields: [promptFavorites.templateId],
+      references: [promptTemplates.id]
+    })
+  })
+)

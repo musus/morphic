@@ -117,7 +117,7 @@ export function ChatPanel({
     if (isFirstRender.current && query && query.trim().length > 0) {
       append({
         role: 'user',
-        content: query
+        parts: [{ type: 'text', text: query }]
       })
       isFirstRender.current = false
     }

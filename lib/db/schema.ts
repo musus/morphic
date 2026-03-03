@@ -10,8 +10,11 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   varchar
 } from 'drizzle-orm/pg-core'
+
+import type { TemplateVariable } from '@/lib/types/prompt-template'
 
 // Constants
 const ID_LENGTH = 191
@@ -298,3 +301,86 @@ export const feedback = pgTable(
 ).enableRLS()
 
 export type Feedback = InferSelectModel<typeof feedback>
+
+// Prompt templates table
+export const promptTemplates = pgTable(
+  'prompt_templates',
+  {
+    id: varchar('id', { length: ID_LENGTH })
+      .primaryKey()
+      .$defaultFn(() => generateId()),
+    title: varchar('title', { length: VARCHAR_LENGTH }).notNull(),
+    description: text('description'),
+    content: text('content').notNull(),
+    category: varchar('category', { length: VARCHAR_LENGTH }),
+    variables: jsonb('variables').$type<TemplateVariable[]>().default([]),
+    modelId: varchar('model_id', { length: VARCHAR_LENGTH }),
+    userId: varchar('user_id', { length: USER_ID_LENGTH }).notNull(),
+    visibility: varchar('visibility', {
+      length: VARCHAR_LENGTH,
+      enum: ['public', 'private']
+    })
+      .notNull()
+      .default('private'),
+    useCount: integer('use_count').notNull().default(0),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow()
+  },
+  table => [
+    index('prompt_templates_user_id_idx').on(table.userId),
+    index('prompt_templates_visibility_use_count_idx').on(
+      table.visibility,
+      table.useCount.desc()
+    ),
+    index('prompt_templates_category_idx').on(table.category),
+
+    pgPolicy('users_manage_own_templates', {
+      as: 'permissive',
+      for: 'all',
+      to: 'public',
+      using: sql`user_id = current_setting('app.current_user_id', true)`,
+      withCheck: sql`user_id = current_setting('app.current_user_id', true)`
+    }),
+    pgPolicy('public_templates_readable', {
+      as: 'permissive',
+      for: 'select',
+      to: 'public',
+      using: sql`visibility = 'public'`
+    })
+  ]
+).enableRLS()
+
+export type PromptTemplate = InferSelectModel<typeof promptTemplates>
+
+// Prompt favorites table
+export const promptFavorites = pgTable(
+  'prompt_favorites',
+  {
+    id: varchar('id', { length: ID_LENGTH })
+      .primaryKey()
+      .$defaultFn(() => generateId()),
+    userId: varchar('user_id', { length: USER_ID_LENGTH }).notNull(),
+    templateId: varchar('template_id', { length: ID_LENGTH })
+      .notNull()
+      .references(() => promptTemplates.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at').notNull().defaultNow()
+  },
+  table => [
+    index('prompt_favorites_user_id_idx').on(table.userId),
+    index('prompt_favorites_template_id_idx').on(table.templateId),
+    uniqueIndex('prompt_favorites_user_template_unique').on(
+      table.userId,
+      table.templateId
+    ),
+
+    pgPolicy('users_manage_own_favorites', {
+      as: 'permissive',
+      for: 'all',
+      to: 'public',
+      using: sql`user_id = current_setting('app.current_user_id', true)`,
+      withCheck: sql`user_id = current_setting('app.current_user_id', true)`
+    })
+  ]
+).enableRLS()
+
+export type PromptFavorite = InferSelectModel<typeof promptFavorites>

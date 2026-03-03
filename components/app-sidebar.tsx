@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { Plus } from 'lucide-react'
+import { FileText, Plus } from 'lucide-react'
 
 import {
   Sidebar,
@@ -42,6 +42,17 @@ export default function AppSidebar({ hasUser = false }: { hasUser?: boolean }) {
               <SidebarNavLink href="/" className="flex items-center gap-2">
                 <Plus className="size-4" />
                 <span>新規</span>
+              </SidebarNavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <SidebarNavLink
+                href="/prompts"
+                className="flex items-center gap-2"
+              >
+                <FileText className="size-4" />
+                <span>プロンプト</span>
               </SidebarNavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>

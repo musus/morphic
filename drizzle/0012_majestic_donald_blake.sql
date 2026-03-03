@@ -1,0 +1,1 @@
+ALTER TABLE "prompt_templates" ADD COLUMN "model_id" varchar(256);
