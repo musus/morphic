@@ -18,8 +18,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 import {
   DropdownMenu,
@@ -30,7 +29,8 @@ import {
 import {
   SidebarMenuAction,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
+  useSidebar
 } from '@/components/ui/sidebar'
 
 import { Spinner } from '../ui/spinner'
@@ -46,10 +46,10 @@ const formatDateWithTime = (date: Date | string) => {
   yesterday.setDate(yesterday.getDate() - 1)
 
   const formatTime = (date: Date) => {
-    return date.toLocaleString('en-US', {
+    return date.toLocaleString('ja-JP', {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true
+      hour12: false
     })
   }
 
@@ -58,21 +58,21 @@ const formatDateWithTime = (date: Date | string) => {
     parsedDate.getMonth() === now.getMonth() &&
     parsedDate.getFullYear() === now.getFullYear()
   ) {
-    return `Today, ${formatTime(parsedDate)}`
+    return `今日 ${formatTime(parsedDate)}`
   } else if (
     parsedDate.getDate() === yesterday.getDate() &&
     parsedDate.getMonth() === yesterday.getMonth() &&
     parsedDate.getFullYear() === yesterday.getFullYear()
   ) {
-    return `Yesterday, ${formatTime(parsedDate)}`
+    return `昨日 ${formatTime(parsedDate)}`
   } else {
-    return parsedDate.toLocaleString('en-US', {
+    return parsedDate.toLocaleString('ja-JP', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true
+      hour12: false
     })
   }
 }
@@ -83,48 +83,28 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
   const isActive = pathname === path
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isAlertOpen, setIsAlertOpen] = useState(false)
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+  const { setOpenMobile } = useSidebar()
 
   const handleDeleteChat = useCallback(() => {
     startTransition(async () => {
       const result = await deleteChat(chat.id)
 
       if (result?.success) {
-        toast.success('Chat deleted')
+        toast.success('チャットを削除しました')
         if (isActive) {
+          setOpenMobile(false)
           router.push('/')
         }
         window.dispatchEvent(new CustomEvent('chat-history-updated'))
       } else if (result?.error) {
         toast.error(result.error)
       } else {
-        toast.error('An unexpected error occurred while deleting the chat.')
+        toast.error('チャットの削除中に予期しないエラーが発生しました。')
       }
-      setIsAlertOpen(false)
-      setIsMenuOpen(false)
+      setShowDeleteAlert(false)
     })
-  }, [chat.id, isActive, router, startTransition])
-
-  const handleAlertOpenChange = useCallback(
-    (open: boolean) => {
-      setIsAlertOpen(open)
-      if (!open && !isPending) {
-        setIsMenuOpen(false)
-      }
-    },
-    [isPending, setIsMenuOpen, setIsAlertOpen]
-  )
-
-  const handleMenuOpenChange = useCallback(
-    (open: boolean) => {
-      setIsMenuOpen(open)
-      if (!open && !isPending) {
-        setIsAlertOpen(false)
-      }
-    },
-    [isPending, setIsMenuOpen, setIsAlertOpen]
-  )
+  }, [chat.id, isActive, router, startTransition, setOpenMobile])
 
   return (
     <SidebarMenuItem>
@@ -133,7 +113,7 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
         isActive={isActive}
         className="h-auto flex-col gap-0.5 items-start p-2 pr-8"
       >
-        <Link href={path}>
+        <Link href={path} onClick={() => setOpenMobile(false)}>
           <div className="text-xs font-medium truncate select-none w-full">
             {chat.title}
           </div>
@@ -143,59 +123,55 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
         </Link>
       </SidebarMenuButton>
 
-      <DropdownMenu open={isMenuOpen} onOpenChange={handleMenuOpenChange}>
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <SidebarMenuAction className="size-7 p-1 mr-1">
             <MoreHorizontal size={16} />
-            <span className="sr-only">Chat Actions</span>
+            <span className="sr-only">チャットの操作</span>
           </SidebarMenuAction>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start">
-          <AlertDialog open={isAlertOpen} onOpenChange={handleAlertOpenChange}>
-            <AlertDialogTrigger asChild>
-              <DropdownMenuItem
-                className="gap-2 text-destructive focus:text-destructive"
-                onSelect={e => {
-                  e.preventDefault()
-                }}
-              >
-                <Trash2 size={14} />
-                Delete Chat
-              </DropdownMenuItem>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  this chat history.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel disabled={isPending}>
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  disabled={isPending}
-                  onClick={event => {
-                    event.preventDefault()
-                    handleDeleteChat()
-                  }}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  {isPending ? (
-                    <div className="flex items-center justify-center">
-                      <Spinner />
-                    </div>
-                  ) : (
-                    'Delete'
-                  )}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <DropdownMenuItem
+            className="gap-2 text-destructive focus:text-destructive"
+            onSelect={() => setShowDeleteAlert(true)}
+          >
+            <Trash2 size={14} />
+            チャットを削除
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
+            <AlertDialogDescription>
+              この操作は取り消せません。このチャット履歴は完全に削除されます。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>
+              キャンセル
+            </AlertDialogCancel>
+            <AlertDialogAction
+              disabled={isPending}
+              onClick={event => {
+                event.preventDefault()
+                handleDeleteChat()
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isPending ? (
+                <div className="flex items-center justify-center">
+                  <Spinner />
+                </div>
+              ) : (
+                '削除'
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </SidebarMenuItem>
   )
 }

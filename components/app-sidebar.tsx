@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import Link from 'next/link'
 
 import { Plus } from 'lucide-react'
 
@@ -16,12 +15,13 @@ import {
 
 import { ChatHistorySection } from './sidebar/chat-history-section'
 import { ChatHistorySkeleton } from './sidebar/chat-history-skeleton'
+import { SidebarNavLink } from './sidebar/sidebar-nav-link'
 
 export default function AppSidebar({ hasUser = false }: { hasUser?: boolean }) {
   return (
     <Sidebar side="left" variant="sidebar" collapsible="offcanvas">
       <SidebarHeader className="flex flex-row justify-between items-center">
-        <Link href="/" className="flex items-center px-2 py-3">
+        <SidebarNavLink href="/" className="flex items-center px-2 py-3">
           <span
             className="text-sm tracking-tight"
             style={{
@@ -32,17 +32,17 @@ export default function AppSidebar({ hasUser = false }: { hasUser?: boolean }) {
           >
             techless
           </span>
-        </Link>
+        </SidebarNavLink>
         <SidebarTrigger />
       </SidebarHeader>
       <SidebarContent className="flex flex-col px-2 py-4 h-full">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href="/" className="flex items-center gap-2">
+              <SidebarNavLink href="/" className="flex items-center gap-2">
                 <Plus className="size-4" />
-                <span>New</span>
-              </Link>
+                <span>新規</span>
+              </SidebarNavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
