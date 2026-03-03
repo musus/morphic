@@ -93,17 +93,17 @@ export async function POST(req: Request) {
         : 'quick'
 
     const isCloudDeployment = process.env.MORPHIC_CLOUD_DEPLOYMENT === 'true'
-    const forceSpeed = isGuest || isCloudDeployment
-    const modelCookieStore = forceSpeed
+    const forceDefaultModel = isGuest || isCloudDeployment
+    const modelCookieStore = forceDefaultModel
       ? ({
           get: (name: string) =>
-            name === 'modelType'
-              ? ({ value: 'speed' } as const)
+            name === 'selectedModelId'
+              ? undefined
               : cookieStore.get(name)
         } as typeof cookieStore)
       : cookieStore
 
-    // Select the appropriate model based on model type preference and search mode
+    // Select the appropriate model based on selected model ID and search mode
     const selectedModel = selectModel({
       cookieStore: modelCookieStore,
       searchMode
@@ -119,13 +119,6 @@ export async function POST(req: Request) {
       )
     }
 
-    // Resolve model type from cookie (forced to speed for guests and cloud)
-    const modelTypeCookie = cookieStore.get('modelType')?.value
-    const resolvedModelType =
-      modelTypeCookie === 'quality' || modelTypeCookie === 'speed'
-        ? modelTypeCookie
-        : undefined
-    const modelType = forceSpeed ? 'speed' : resolvedModelType
     if (!isGuest) {
       const overallLimitResponse = await checkAndEnforceOverallChatLimit(userId)
       if (overallLimitResponse) return overallLimitResponse
@@ -133,7 +126,7 @@ export async function POST(req: Request) {
 
     const streamStart = performance.now()
     perfLog(
-      `createChatStreamResponse - Start: model=${selectedModel.providerId}:${selectedModel.id}, searchMode=${searchMode}, modelType=${modelType}`
+      `createChatStreamResponse - Start: model=${selectedModel.providerId}:${selectedModel.id}, searchMode=${searchMode}`
     )
 
     const response = isGuest
@@ -142,7 +135,6 @@ export async function POST(req: Request) {
           model: selectedModel,
           abortSignal,
           searchMode,
-          modelType,
           chatId
         })
       : await createChatStreamResponse({
@@ -154,8 +146,7 @@ export async function POST(req: Request) {
           messageId,
           abortSignal,
           isNewChat,
-          searchMode,
-          modelType
+          searchMode
         })
 
     perfTime('createChatStreamResponse resolved', streamStart)
@@ -178,7 +169,6 @@ export async function POST(req: Request) {
         if (!isGuest && userId) {
           await trackChatEvent({
             searchMode,
-            modelType: modelTypeCookie === 'quality' ? 'quality' : 'speed',
             conversationTurn,
             isNewChat: isNewChat ?? false,
             trigger:

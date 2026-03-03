@@ -1,23 +1,19 @@
 import cloudConfig from '@/config/models/cloud.json'
 import defaultConfig from '@/config/models/default.json'
 
-import { ModelType } from '@/lib/types/model-type'
 import { Model } from '@/lib/types/models'
-import { SearchMode } from '@/lib/types/search'
 
 export interface ModelsConfig {
   version: number
   models: {
-    byMode: Record<SearchMode, Record<ModelType, Model>>
+    available: Model[]
+    defaultModelId: string
     relatedQuestions: Model
   }
 }
 
 let cachedConfig: ModelsConfig | null = null
 let cachedProfile: string | null = null
-
-const VALID_MODEL_TYPES: ModelType[] = ['speed', 'quality']
-const VALID_SEARCH_MODES: SearchMode[] = ['quick', 'adaptive']
 
 function validateModelsConfigStructure(
   json: unknown
@@ -32,30 +28,17 @@ function validateModelsConfigStructure(
   if (!parsed.models || typeof parsed.models !== 'object') {
     throw new Error('Invalid models config: missing models')
   }
-  if (!parsed.models.byMode || !parsed.models.relatedQuestions) {
-    throw new Error('Invalid models config: missing required sections')
+  if (!Array.isArray(parsed.models.available)) {
+    throw new Error('Invalid models config: available must be an array')
   }
-  if (typeof parsed.models.byMode !== 'object') {
-    throw new Error('Invalid models config: byMode must be an object')
+  if (parsed.models.available.length === 0) {
+    throw new Error('Invalid models config: available must not be empty')
   }
-  if (typeof parsed.models.relatedQuestions !== 'object') {
-    throw new Error('Invalid models config: relatedQuestions must be an object')
+  if (typeof parsed.models.defaultModelId !== 'string') {
+    throw new Error('Invalid models config: missing defaultModelId')
   }
-
-  for (const searchMode of VALID_SEARCH_MODES) {
-    const modeEntry = parsed.models.byMode[searchMode]
-    if (!modeEntry || typeof modeEntry !== 'object') {
-      throw new Error(
-        `Invalid models config: missing configuration for mode "${searchMode}"`
-      )
-    }
-    for (const modelType of VALID_MODEL_TYPES) {
-      if (!modeEntry[modelType]) {
-        throw new Error(
-          `Invalid models config: missing definition for mode "${searchMode}" and model type "${modelType}"`
-        )
-      }
-    }
+  if (!parsed.models.relatedQuestions) {
+    throw new Error('Invalid models config: missing relatedQuestions')
   }
 }
 

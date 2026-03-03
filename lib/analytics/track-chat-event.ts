@@ -18,7 +18,6 @@ import type { ChatEventData } from './types'
  * ```typescript
  * await trackChatEvent({
  *   searchMode: 'quick',
- *   modelType: 'quality',
  *   conversationTurn: 1,
  *   isNewChat: true,
  *   trigger: 'submit-message',
@@ -38,7 +37,6 @@ export async function trackChatEvent(data: ChatEventData): Promise<void> {
     // Send event to Vercel Analytics
     await track('chat_message_sent', {
       searchMode: data.searchMode,
-      modelType: data.modelType,
       conversationTurn: data.conversationTurn,
       isNewChat: data.isNewChat,
       trigger: data.trigger,

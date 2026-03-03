@@ -17,7 +17,7 @@ import { Button } from './ui/button'
 import { IconBlinkingLogo } from './ui/icons'
 import { ActionButtons } from './action-buttons'
 import { FileUploadButton } from './file-upload-button'
-import { ModelTypeSelector } from './model-type-selector'
+import { ModelSelector } from './model-selector'
 import { SearchModeSelector } from './search-mode-selector'
 import { UploadedFileList } from './uploaded-file-list'
 
@@ -296,7 +296,7 @@ export function ChatPanel({
                 </Button>
               )}
               {process.env.NEXT_PUBLIC_MORPHIC_CLOUD_DEPLOYMENT !== 'true' && (
-                <ModelTypeSelector disabled={isGuest} />
+                <ModelSelector disabled={isGuest} />
               )}
               <Button
                 type={isLoading ? 'button' : 'submit'}

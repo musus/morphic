@@ -4,4 +4,5 @@ export interface Model {
   provider: string
   providerId: string
   providerOptions?: Record<string, any>
+  searchModeConfig?: Record<string, { providerOptions?: Record<string, any> }>
 }

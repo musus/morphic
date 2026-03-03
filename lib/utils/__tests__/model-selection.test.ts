@@ -2,128 +2,114 @@ import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { ModelType } from '@/lib/types/model-type'
 import type { Model } from '@/lib/types/models'
-import type { SearchMode } from '@/lib/types/search'
 
-vi.mock('@/lib/config/model-types')
+vi.mock('@/lib/config/load-models-config')
 vi.mock('@/lib/utils/registry')
 
-import { getModelForModeAndType } from '@/lib/config/model-types'
+import { getModelsConfig } from '@/lib/config/load-models-config'
 import { DEFAULT_MODEL, selectModel } from '@/lib/utils/model-selection'
 import { isProviderEnabled } from '@/lib/utils/registry'
 
-const mockGetModelForModeAndType = vi.mocked(getModelForModeAndType)
+const mockGetModelsConfig = vi.mocked(getModelsConfig)
 const mockIsProviderEnabled = vi.mocked(isProviderEnabled)
 
-type Matrix = Record<SearchMode, Partial<Record<ModelType, Model>>>
-
-const quickSpeedModel: Model = {
-  id: 'quick-speed',
-  name: 'Quick Speed',
+const modelA: Model = {
+  id: 'model-a',
+  name: 'Model A',
   provider: 'Provider A',
   providerId: 'provider-a'
 }
 
-const quickQualityModel: Model = {
-  id: 'quick-quality',
-  name: 'Quick Quality',
+const modelB: Model = {
+  id: 'model-b',
+  name: 'Model B',
   provider: 'Provider B',
   providerId: 'provider-b'
 }
 
-const adaptiveQualityModel: Model = {
-  id: 'adaptive-quality',
-  name: 'Adaptive Quality',
+const modelC: Model = {
+  id: 'model-c',
+  name: 'Model C',
   provider: 'Provider C',
-  providerId: 'provider-c'
+  providerId: 'provider-c',
+  searchModeConfig: {
+    quick: { providerOptions: { custom: { effort: 'low' } } },
+    adaptive: { providerOptions: { custom: { effort: 'high' } } }
+  }
 }
 
-const adaptiveSpeedModel: Model = {
-  id: 'adaptive-speed',
-  name: 'Adaptive Speed',
-  provider: 'Provider D',
-  providerId: 'provider-d'
-}
-
-let matrix: Matrix
-
-function setMatrixImplementation() {
-  mockGetModelForModeAndType.mockImplementation(
-    (mode: SearchMode, type: ModelType) => matrix[mode]?.[type]
-  )
-}
-
-function createCookieStore(modelType?: string): ReadonlyRequestCookies {
+function createCookieStore(selectedModelId?: string): ReadonlyRequestCookies {
   return {
     get: (name: string) => {
-      if (name === 'modelType' && modelType) {
-        return { name, value: modelType } as any
+      if (name === 'selectedModelId' && selectedModelId) {
+        return { name, value: selectedModelId } as any
       }
       return undefined
     }
   } as unknown as ReadonlyRequestCookies
 }
 
+function setConfig(available: Model[], defaultModelId: string) {
+  mockGetModelsConfig.mockReturnValue({
+    version: 2,
+    models: {
+      available,
+      defaultModelId,
+      relatedQuestions: modelA
+    }
+  })
+}
+
 describe('selectModel', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    matrix = {
-      quick: {
-        speed: quickSpeedModel,
-        quality: quickQualityModel
-      },
-      adaptive: {
-        speed: adaptiveSpeedModel,
-        quality: adaptiveQualityModel
-      }
-    }
-    setMatrixImplementation()
+    setConfig([modelA, modelB, modelC], 'model-a')
     mockIsProviderEnabled.mockReturnValue(true)
   })
 
-  it('returns the cookie-preferred type for the active mode when available', () => {
+  it('returns the cookie-specified model when available', () => {
     const result = selectModel({
-      cookieStore: createCookieStore('quality'),
+      cookieStore: createCookieStore('model-b'),
       searchMode: 'quick'
     })
 
-    expect(result).toEqual(quickQualityModel)
+    expect(result.id).toBe('model-b')
   })
 
-  it('falls back to speed model for the mode when cookie is absent', () => {
+  it('falls back to default model when cookie is absent', () => {
     const result = selectModel({
       cookieStore: createCookieStore(),
-      searchMode: 'adaptive'
-    })
-
-    expect(result).toEqual(adaptiveSpeedModel)
-  })
-
-  it('falls back to the other type within the same mode when preferred provider is disabled', () => {
-    mockIsProviderEnabled.mockImplementation(providerId =>
-      providerId === 'provider-a' ? false : true
-    )
-
-    const result = selectModel({
-      cookieStore: createCookieStore('speed'),
       searchMode: 'quick'
     })
 
-    expect(result).toEqual(quickQualityModel)
+    expect(result.id).toBe('model-a')
   })
 
-  it('falls back to the next mode in priority order when active mode has no enabled models', () => {
-    mockIsProviderEnabled.mockImplementation(providerId =>
-      providerId === 'provider-a' || providerId === 'provider-b' ? false : true
+  it('falls back to default model when cookie-specified model provider is disabled', () => {
+    mockIsProviderEnabled.mockImplementation(
+      providerId => providerId !== 'provider-b'
     )
 
     const result = selectModel({
-      cookieStore: createCookieStore('quality'),
+      cookieStore: createCookieStore('model-b'),
       searchMode: 'quick'
     })
 
-    expect(result).toEqual(adaptiveQualityModel)
+    expect(result.id).toBe('model-a')
+  })
+
+  it('falls back to first available model when default model provider is disabled', () => {
+    mockIsProviderEnabled.mockImplementation(
+      providerId => providerId === 'provider-b'
+    )
+
+    const result = selectModel({
+      cookieStore: createCookieStore(),
+      searchMode: 'quick'
+    })
+
+    expect(result.id).toBe('model-b')
   })
 
   it('returns DEFAULT_MODEL when no configured providers are enabled', () => {
@@ -134,6 +120,27 @@ describe('selectModel', () => {
       searchMode: 'quick'
     })
 
-    expect(result).toEqual(DEFAULT_MODEL)
+    expect(result).toEqual(
+      expect.objectContaining({ id: DEFAULT_MODEL.id })
+    )
+  })
+
+  it('resolves providerOptions from searchModeConfig for the active search mode', () => {
+    const result = selectModel({
+      cookieStore: createCookieStore('model-c'),
+      searchMode: 'adaptive'
+    })
+
+    expect(result.id).toBe('model-c')
+    expect(result.providerOptions).toEqual({ custom: { effort: 'high' } })
+  })
+
+  it('resolves providerOptions for quick mode by default', () => {
+    const result = selectModel({
+      cookieStore: createCookieStore('model-c'),
+      searchMode: 'quick'
+    })
+
+    expect(result.providerOptions).toEqual({ custom: { effort: 'low' } })
   })
 })

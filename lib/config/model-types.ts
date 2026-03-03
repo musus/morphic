@@ -1,16 +1,11 @@
-import { ModelType } from '@/lib/types/model-type'
 import { Model } from '@/lib/types/models'
-import { SearchMode } from '@/lib/types/search'
 
 import { getModelsConfig } from './load-models-config'
 
-// Retrieve the model assigned to a specific search mode and model type combination.
-export function getModelForModeAndType(
-  mode: SearchMode,
-  type: ModelType
-): Model | undefined {
+// Retrieve a model by its ID from the available models list.
+export function getModelById(id: string): Model | undefined {
   const cfg = getModelsConfig()
-  return cfg.models.byMode?.[mode]?.[type]
+  return cfg.models.available.find(m => m.id === id)
 }
 
 // Accessor for the related questions model configuration.

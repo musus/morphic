@@ -18,12 +18,10 @@ async function getConfiguredOllamaModels(): Promise<Model[]> {
   try {
     const config = await loadModelsConfig()
 
-    // Check byMode models
-    for (const mode of Object.values(config.models.byMode)) {
-      for (const model of Object.values(mode as Record<string, Model>)) {
-        if (model.providerId === 'ollama') {
-          ollamaModels.push(model)
-        }
+    // Check available models
+    for (const model of config.models.available) {
+      if (model.providerId === 'ollama') {
+        ollamaModels.push(model)
       }
     }
 
