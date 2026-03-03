@@ -14,7 +14,6 @@ import { cn } from '@/lib/utils'
 
 import { useArtifact } from './artifact/artifact-context'
 import { Button } from './ui/button'
-import { IconBlinkingLogo } from './ui/icons'
 import { ActionButtons } from './action-buttons'
 import { FileUploadButton } from './file-upload-button'
 import { ModelSelector } from './model-selector'
@@ -151,9 +150,15 @@ export function ChatPanel({
     >
       {messages.length === 0 && (
         <div className="mb-10 flex flex-col items-center gap-4">
-          <IconBlinkingLogo className="size-12" />
-          <h1 className="text-2xl font-medium text-foreground">
-            What would you like to know?
+          <h1
+            className="text-3xl tracking-tight text-foreground"
+            style={{
+              fontFamily:
+                "'Helvetica Neue', Helvetica, Arial, sans-serif",
+              fontWeight: 700
+            }}
+          >
+            techless
           </h1>
         </div>
       )}

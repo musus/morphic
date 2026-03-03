@@ -15,7 +15,6 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { IconLogo } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
@@ -83,7 +82,16 @@ export function LoginForm({
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl flex flex-col items-center justify-center gap-4">
-            <IconLogo className="size-12" />
+            <span
+              className="text-2xl tracking-tight"
+              style={{
+                fontFamily:
+                  "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                fontWeight: 700
+              }}
+            >
+              techless
+            </span>
             Welcome back
           </CardTitle>
           <CardDescription>Sign in to your account</CardDescription>

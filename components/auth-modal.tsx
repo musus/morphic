@@ -10,7 +10,6 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { IconLogo } from '@/components/ui/icons'
 
 interface AuthModalProps {
   open: boolean
@@ -22,14 +21,23 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader className="items-center text-center">
-          <div className="mx-auto mb-6 flex size-20 items-center justify-center rounded-full bg-muted">
-            <IconLogo className="size-14" />
+          <div className="mx-auto mb-6 flex size-20 items-center justify-center">
+            <span
+              className="text-2xl tracking-tight"
+              style={{
+                fontFamily:
+                  "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                fontWeight: 700
+              }}
+            >
+              techless
+            </span>
           </div>
           <DialogTitle className="text-xl font-semibold">
-            Continue with Morphic
+            Continue with techless
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            To use Morphic, sign in to your account or create a new one.
+            To use techless, sign in to your account or create a new one.
           </DialogDescription>
         </DialogHeader>
         <div className="mt-6 space-y-3">
