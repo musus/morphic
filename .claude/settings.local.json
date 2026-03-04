@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:console.groq.com)",
+      "WebFetch(domain:intuitionlabs.ai)",
+      "Bash(git commit -m \"$\\(cat <<'EOF'\nfeat: 検索ステップUIの残存英語ラベルを日本語化\n\n検索結果数、ソースセクション、インスペクターパネルのツール名・\nツールチップなど、前回の日本語化で漏れていた箇所を修正\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "next-devtools"
+  ]
+}
