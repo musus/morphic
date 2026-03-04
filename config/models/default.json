@@ -8,7 +8,7 @@
         "provider": "OpenAI",
         "providerId": "openai",
         "searchModeConfig": {
-          "adaptive": {
+          "research": {
             "providerOptions": {
               "openai": {
                 "reasoningEffort": "low",
@@ -24,7 +24,7 @@
         "provider": "OpenAI",
         "providerId": "openai",
         "searchModeConfig": {
-          "adaptive": {
+          "research": {
             "providerOptions": {
               "openai": {
                 "reasoningEffort": "medium",
@@ -33,12 +33,6 @@
             }
           }
         }
-      },
-      {
-        "id": "gpt-4.1-mini",
-        "name": "GPT-4.1 mini",
-        "provider": "OpenAI",
-        "providerId": "openai"
       },
       {
         "id": "gpt-5.2",
@@ -46,7 +40,7 @@
         "provider": "OpenAI",
         "providerId": "openai",
         "searchModeConfig": {
-          "adaptive": {
+          "research": {
             "providerOptions": {
               "openai": {
                 "reasoningEffort": "medium",
@@ -57,22 +51,10 @@
         }
       },
       {
-        "id": "claude-haiku-4-5",
-        "name": "Claude Haiku 4.5",
-        "provider": "Anthropic",
-        "providerId": "anthropic"
-      },
-      {
         "id": "claude-sonnet-4-6",
         "name": "Claude Sonnet 4.6",
         "provider": "Anthropic",
         "providerId": "anthropic"
-      },
-      {
-        "id": "gemini-2.5-flash",
-        "name": "Gemini 2.5 Flash",
-        "provider": "Google",
-        "providerId": "google"
       },
       {
         "id": "gemini-3-flash-preview",
@@ -87,13 +69,6 @@
         "providerId": "google"
       },
       {
-        "id": "meta-llama/llama-4-maverick-17b-128e-instruct",
-        "name": "Llama 4 Maverick",
-        "provider": "Meta (Groq)",
-        "providerId": "groq",
-        "providerIcon": "meta"
-      },
-      {
         "id": "qwen/qwen3-32b",
         "name": "Qwen 3 32B",
         "provider": "Alibaba (Groq)",
@@ -101,8 +76,8 @@
         "providerIcon": "qwen"
       },
       {
-        "id": "llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B",
+        "id": "meta-llama/llama-4-maverick-17b-128e-instruct",
+        "name": "Llama 4 Maverick",
         "provider": "Meta (Groq)",
         "providerId": "groq",
         "providerIcon": "meta"

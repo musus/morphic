@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Check, ChevronDown } from 'lucide-react'
 
-import { SEARCH_MODE_CONFIGS } from '@/lib/config/search-modes'
+import {
+  getSearchModeLimitation,
+  SEARCH_MODE_CONFIGS
+} from '@/lib/config/search-modes'
 import { SearchMode } from '@/lib/types/search'
 import { cn } from '@/lib/utils'
 import { getCookie, setCookie } from '@/lib/utils/cookies'
@@ -18,8 +21,14 @@ import {
 } from './ui/dropdown-menu'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 
-export function SearchModeSelector() {
-  const [value, setValue] = useState<SearchMode>('quick')
+interface SearchModeSelectorProps {
+  selectedProviderId?: string | null
+}
+
+export function SearchModeSelector({
+  selectedProviderId = null
+}: SearchModeSelectorProps) {
+  const [value, setValue] = useState<SearchMode>('search')
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({})
   const [openHoverCard, setOpenHoverCard] = useState<string | null>(null)
   const [justSelected, setJustSelected] = useState(false)
@@ -28,12 +37,12 @@ export function SearchModeSelector() {
 
   useEffect(() => {
     const savedMode = getCookie('searchMode')
-    if (savedMode && ['quick', 'adaptive'].includes(savedMode)) {
+    if (savedMode && ['chat', 'search', 'research'].includes(savedMode)) {
       setValue(savedMode as SearchMode)
     } else if (savedMode) {
-      // Clean up invalid cookie value (e.g., old 'planning' mode)
-      setCookie('searchMode', 'quick')
-      setValue('quick')
+      // Clean up invalid cookie value (e.g., old 'quick', 'adaptive', 'direct', 'planning' modes)
+      setCookie('searchMode', 'search')
+      setValue('search')
     }
   }, [])
 
@@ -66,10 +75,24 @@ export function SearchModeSelector() {
     }, 500)
   }
 
+  // Auto-fallback when current mode becomes disabled due to model change
+  useEffect(() => {
+    const limitation = getSearchModeLimitation(selectedProviderId, value)
+    if (limitation.disabled) {
+      // Fall back to first available mode
+      const fallback = SEARCH_MODE_CONFIGS.find(
+        c => !getSearchModeLimitation(selectedProviderId, c.value).disabled
+      )
+      if (fallback) handleModeSelect(fallback.value)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedProviderId])
+
   const selectedMode = SEARCH_MODE_CONFIGS.find(
     config => config.value === value
   )
   const SelectedIcon = selectedMode?.icon
+  const selectedLimitation = getSearchModeLimitation(selectedProviderId, value)
 
   return (
     <>
@@ -89,7 +112,9 @@ export function SearchModeSelector() {
                   )}
                 />
               )}
-              <span className="text-xs font-medium">{selectedMode?.label}</span>
+              <span className="text-xs font-medium">
+                {selectedMode?.label}
+              </span>
               <ChevronDown
                 className={cn(
                   'h-3 w-3 ml-1 opacity-50 transition-transform duration-200',
@@ -102,11 +127,23 @@ export function SearchModeSelector() {
             {SEARCH_MODE_CONFIGS.map(config => {
               const ModeIcon = config.icon
               const isSelected = value === config.value
+              const limitation = getSearchModeLimitation(
+                selectedProviderId,
+                config.value
+              )
               return (
                 <DropdownMenuItem
                   key={config.value}
-                  onClick={() => handleModeSelect(config.value)}
-                  className="relative flex flex-col items-start gap-1 py-2 pl-8 pr-2 cursor-pointer focus:outline-none"
+                  onClick={() =>
+                    !limitation.disabled && handleModeSelect(config.value)
+                  }
+                  disabled={limitation.disabled}
+                  className={cn(
+                    'relative flex flex-col items-start gap-1 py-2 pl-8 pr-2 focus:outline-none',
+                    limitation.disabled
+                      ? 'opacity-40 cursor-not-allowed'
+                      : 'cursor-pointer'
+                  )}
                 >
                   {isSelected && (
                     <Check className="absolute left-2 top-2.5 h-4 w-4" />
@@ -121,6 +158,11 @@ export function SearchModeSelector() {
                     <span className="text-xs text-muted-foreground">
                       {config.description}
                     </span>
+                    {limitation.disabled && limitation.message && (
+                      <span className="text-xs text-amber-500">
+                        {limitation.message}
+                      </span>
+                    )}
                   </div>
                 </DropdownMenuItem>
               )
@@ -143,6 +185,10 @@ export function SearchModeSelector() {
             {SEARCH_MODE_CONFIGS.map((config, index) => {
               const Icon = config.icon
               const isSelected = value === config.value
+              const limitation = getSearchModeLimitation(
+                selectedProviderId,
+                config.value
+              )
 
               return (
                 <HoverCard
@@ -162,15 +208,21 @@ export function SearchModeSelector() {
                       ref={el => {
                         buttonsRef.current[index] = el
                       }}
-                      onClick={() => handleModeSelect(config.value)}
+                      onClick={() =>
+                        !limitation.disabled && handleModeSelect(config.value)
+                      }
+                      disabled={limitation.disabled}
                       className={cn(
                         'relative z-10 flex items-center justify-center rounded-full px-3 py-2 transition-colors duration-200',
-                        isSelected
-                          ? 'text-foreground'
-                          : 'text-muted-foreground hover:text-foreground/80'
+                        limitation.disabled
+                          ? 'opacity-30 cursor-not-allowed'
+                          : isSelected
+                            ? 'text-foreground'
+                            : 'text-muted-foreground hover:text-foreground/80'
                       )}
                       aria-label={`${config.label} mode`}
                       aria-pressed={isSelected}
+                      aria-disabled={limitation.disabled}
                     >
                       <Icon
                         className={cn(
@@ -196,6 +248,11 @@ export function SearchModeSelector() {
                       <p className="text-xs text-muted-foreground leading-tight">
                         {config.description}
                       </p>
+                      {limitation.disabled && limitation.message && (
+                        <p className="text-xs text-amber-500 leading-tight">
+                          {limitation.message}
+                        </p>
+                      )}
                     </div>
                   </HoverCardContent>
                 </HoverCard>

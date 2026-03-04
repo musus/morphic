@@ -88,9 +88,9 @@ export async function POST(req: Request) {
     // Get search mode from cookie
     const searchModeCookie = cookieStore.get('searchMode')?.value
     const searchMode: SearchMode =
-      searchModeCookie && ['quick', 'adaptive'].includes(searchModeCookie)
+      searchModeCookie && ['chat', 'search', 'research'].includes(searchModeCookie)
         ? (searchModeCookie as SearchMode)
-        : 'quick'
+        : 'search'
 
     const isCloudDeployment = process.env.MORPHIC_CLOUD_DEPLOYMENT === 'true'
     const forceDefaultModel = isGuest || isCloudDeployment

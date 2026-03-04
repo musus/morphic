@@ -34,8 +34,8 @@ const modelC: Model = {
   provider: 'Provider C',
   providerId: 'provider-c',
   searchModeConfig: {
-    quick: { providerOptions: { custom: { effort: 'low' } } },
-    adaptive: { providerOptions: { custom: { effort: 'high' } } }
+    search: { providerOptions: { custom: { effort: 'low' } } },
+    research: { providerOptions: { custom: { effort: 'high' } } }
   }
 }
 
@@ -71,7 +71,7 @@ describe('selectModel', () => {
   it('returns the cookie-specified model when available', () => {
     const result = selectModel({
       cookieStore: createCookieStore('model-b'),
-      searchMode: 'quick'
+      searchMode: 'search'
     })
 
     expect(result.id).toBe('model-b')
@@ -80,7 +80,7 @@ describe('selectModel', () => {
   it('falls back to default model when cookie is absent', () => {
     const result = selectModel({
       cookieStore: createCookieStore(),
-      searchMode: 'quick'
+      searchMode: 'search'
     })
 
     expect(result.id).toBe('model-a')
@@ -93,7 +93,7 @@ describe('selectModel', () => {
 
     const result = selectModel({
       cookieStore: createCookieStore('model-b'),
-      searchMode: 'quick'
+      searchMode: 'search'
     })
 
     expect(result.id).toBe('model-a')
@@ -106,7 +106,7 @@ describe('selectModel', () => {
 
     const result = selectModel({
       cookieStore: createCookieStore(),
-      searchMode: 'quick'
+      searchMode: 'search'
     })
 
     expect(result.id).toBe('model-b')
@@ -117,7 +117,7 @@ describe('selectModel', () => {
 
     const result = selectModel({
       cookieStore: createCookieStore(),
-      searchMode: 'quick'
+      searchMode: 'search'
     })
 
     expect(result).toEqual(
@@ -128,17 +128,17 @@ describe('selectModel', () => {
   it('resolves providerOptions from searchModeConfig for the active search mode', () => {
     const result = selectModel({
       cookieStore: createCookieStore('model-c'),
-      searchMode: 'adaptive'
+      searchMode: 'research'
     })
 
     expect(result.id).toBe('model-c')
     expect(result.providerOptions).toEqual({ custom: { effort: 'high' } })
   })
 
-  it('resolves providerOptions for quick mode by default', () => {
+  it('resolves providerOptions for search mode by default', () => {
     const result = selectModel({
       cookieStore: createCookieStore('model-c'),
-      searchMode: 'quick'
+      searchMode: 'search'
     })
 
     expect(result.providerOptions).toEqual({ custom: { effort: 'low' } })

@@ -11,7 +11,7 @@ const DEFAULT_MODEL: Model = {
   provider: 'OpenAI',
   providerId: 'openai',
   searchModeConfig: {
-    adaptive: {
+    research: {
       providerOptions: {
         openai: {
           reasoningEffort: 'medium',
@@ -32,7 +32,7 @@ function resolveProviderOptions(
   model: Model,
   searchMode?: SearchMode
 ): Model {
-  const modeConfig = model.searchModeConfig?.[searchMode ?? 'quick']
+  const modeConfig = model.searchModeConfig?.[searchMode ?? 'search']
   if (modeConfig?.providerOptions) {
     return { ...model, providerOptions: modeConfig.providerOptions }
   }

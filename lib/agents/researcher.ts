@@ -17,8 +17,9 @@ import { getModel } from '../utils/registry'
 import { isTracingEnabled } from '../utils/telemetry'
 
 import {
-  ADAPTIVE_MODE_PROMPT,
-  QUICK_MODE_PROMPT
+  CHAT_MODE_PROMPT,
+  RESEARCH_MODE_PROMPT,
+  SEARCH_MODE_PROMPT
 } from './prompts/search-mode-prompts'
 
 // Enhanced wrapper function with better type safety and streaming support
@@ -74,7 +75,7 @@ export function createResearcher({
   modelConfig,
   writer,
   parentTraceId,
-  searchMode = 'adaptive'
+  searchMode = 'research'
 }: {
   model: string
   modelConfig?: Model
@@ -97,19 +98,26 @@ export function createResearcher({
 
     // Configure based on search mode
     switch (searchMode) {
-      case 'quick':
+      case 'chat':
+        console.log('[Researcher] Chat mode: maxSteps=1, tools=[]')
+        systemPrompt = CHAT_MODE_PROMPT
+        activeToolsList = []
+        maxSteps = 1
+        break
+
+      case 'search':
         console.log(
-          '[Researcher] Quick mode: maxSteps=20, tools=[search, fetch]'
+          '[Researcher] Search mode: maxSteps=20, tools=[search, fetch]'
         )
-        systemPrompt = QUICK_MODE_PROMPT
+        systemPrompt = SEARCH_MODE_PROMPT
         activeToolsList = ['search', 'fetch']
         maxSteps = 20
         searchTool = wrapSearchToolForQuickMode(originalSearchTool)
         break
 
-      case 'adaptive':
+      case 'research':
       default:
-        systemPrompt = ADAPTIVE_MODE_PROMPT
+        systemPrompt = RESEARCH_MODE_PROMPT
         activeToolsList = ['search', 'fetch']
         // Skip todoWrite for models with limited tool calling (e.g., Groq-hosted OSS models)
         // to avoid "Failed to call a function" errors from complex nested schemas
@@ -117,7 +125,7 @@ export function createResearcher({
           activeToolsList.push('todoWrite')
         }
         console.log(
-          `[Researcher] Adaptive mode: maxSteps=50, tools=[${activeToolsList.join(', ')}]`
+          `[Researcher] Research mode: maxSteps=50, tools=[${activeToolsList.join(', ')}]`
         )
         maxSteps = 50
         searchTool = originalSearchTool

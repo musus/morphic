@@ -15,7 +15,7 @@ interface ChatApiConfig {
   message: string
   chatId?: string
   selectedModelId?: string
-  searchMode?: 'quick' | 'adaptive' | boolean
+  searchMode?: 'chat' | 'search' | 'research' | boolean
   trigger?: 'submit-message' | 'regenerate-message'
   messageId?: string
 }
@@ -89,7 +89,7 @@ class ChatApiTester {
       message: config.message || DEFAULT_MESSAGE,
       chatId: config.chatId || this.generateId(),
       selectedModelId: config.selectedModelId,
-      searchMode: config.searchMode ?? 'adaptive',
+      searchMode: config.searchMode ?? 'research',
       trigger: config.trigger || 'submit-message',
       messageId: config.messageId
     }
@@ -330,17 +330,17 @@ function parseArgs(): Partial<ChatApiConfig> {
         break
       case '-s':
       case '--search':
-        config.searchMode = 'adaptive'
+        config.searchMode = 'research'
         break
       case '--no-search':
         config.searchMode = false
         break
       case '--search-mode':
         const searchMode = args[++i]
-        if (['quick', 'adaptive'].includes(searchMode)) {
-          config.searchMode = searchMode as 'quick' | 'adaptive'
+        if (['chat', 'search', 'research'].includes(searchMode)) {
+          config.searchMode = searchMode as 'chat' | 'search' | 'research'
         } else {
-          console.error('❌ Invalid search mode. Use: quick or adaptive')
+          console.error('❌ Invalid search mode. Use: chat, search, or research')
           process.exit(1)
         }
         break
@@ -370,9 +370,9 @@ Options:
   -m, --message <text>    Message to send (default: "Hello, how are you?")
   -u, --url <url>         API URL (default: http://localhost:3000/api/chat)
   -c, --chat-id <id>      Chat ID (default: auto-generated)
-  -s, --search            Enable search mode with adaptive strategy (default)
+  -s, --search            Enable search mode with research strategy (default)
   --no-search             Disable search mode
-  --search-mode <type>    Search strategy: quick or adaptive
+  --search-mode <type>    Search strategy: chat, search, or research
   --model <id>            Model ID (e.g., gpt-5-mini, claude-sonnet-4-6)
   -t, --trigger <type>    Trigger type: submit (default) or regenerate
   --message-id <id>       Message ID (required for regenerate)
