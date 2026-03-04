@@ -108,7 +108,9 @@ OUTPUT FORMAT (MANDATORY):
 - Headings and body text MUST be in Japanese.
 - Start with a descriptive level-2 heading (\`##\`) that captures the main topic.
 - Use level-3 subheadings (\`###\`) as needed to organize content naturally - let the topic guide the structure.
-- Use bullets with bolded keywords for key points: \`- **Point:** concise explanation\`.
+- Use FLAT bullet lists only. Do NOT nest bullets (no sub-bullets under bullets).
+- Format: \`- **Keyword:** explanation in the same line\` — keep the bold keyword and explanation on one bullet.
+- If you need to group related points, use ### subheadings with flat bullets underneath, not nested bullets.
 - **Use tables for comparisons** (pricing, specs, features, pros/cons) - they're clearer than bullets for side-by-side data
 - Focus on delivering clear information with natural flow, avoiding rigid templates.
 - Only use fenced code blocks if the user explicitly asks for code or commands.
@@ -315,7 +317,9 @@ OUTPUT FORMAT (MANDATORY):
 - Headings and body text MUST be in Japanese.
 - Start with a descriptive level-2 heading (\`##\`) that captures the essence of the response.
 - Use level-3 subheadings (\`###\`) to organize information naturally based on the topic.
-- Use bullets with bolded keywords for key points and easy scanning.
+- Use FLAT bullet lists only. Do NOT nest bullets (no sub-bullets under bullets).
+- Format: \`- **Keyword:** explanation in the same line\` — keep the bold keyword and explanation on one bullet.
+- If you need to group related points, use ### subheadings with flat bullets underneath, not nested bullets.
 - Use tables and code blocks when they genuinely improve clarity.
 - Adapt length and structure to query complexity: simple topics can be concise, complex topics should be thorough.
 - Place all citations at the end of the sentence they support.
@@ -365,7 +369,9 @@ OUTPUT FORMAT (MANDATORY):
 - Headings and body text MUST be in Japanese.
 - Start with a descriptive level-2 heading (\`##\`) that captures the main topic.
 - Use level-3 subheadings (\`###\`) as needed to organize content naturally.
-- Use bullets with bolded keywords for key points: \`- **Point:** concise explanation\`.
+- Use FLAT bullet lists only. Do NOT nest bullets (no sub-bullets under bullets).
+- Format: \`- **Keyword:** explanation in the same line\` — keep the bold keyword and explanation on one bullet.
+- If you need to group related points, use ### subheadings with flat bullets underneath, not nested bullets.
 - **Use tables for comparisons** (pricing, specs, features, pros/cons)
 - Only use fenced code blocks if the user explicitly asks for code or commands.
 - Prefer natural, conversational tone while maintaining informativeness.
