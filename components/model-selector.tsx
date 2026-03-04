@@ -1,6 +1,6 @@
 'use client'
 
-import { type ComponentType, useEffect, useState } from 'react'
+import { type ComponentType, useEffect, useRef, useState } from 'react'
 
 import { Check, ChevronDown } from 'lucide-react'
 
@@ -54,11 +54,21 @@ function ProviderIcon({
   return <Icon className={className} />
 }
 
-export function ModelSelector({ disabled = false }: { disabled?: boolean }) {
+interface ModelSelectorProps {
+  disabled?: boolean
+  onModelChange?: (model: { id: string; providerId: string }) => void
+}
+
+export function ModelSelector({
+  disabled = false,
+  onModelChange
+}: ModelSelectorProps) {
   const [models, setModels] = useState<ModelOption[]>([])
   const [defaultModelId, setDefaultModelId] = useState<string>('')
   const [selectedId, setSelectedId] = useState<string>('')
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const onModelChangeRef = useRef(onModelChange)
+  onModelChangeRef.current = onModelChange
 
   useEffect(() => {
     fetch('/api/models')
@@ -70,7 +80,17 @@ export function ModelSelector({ disabled = false }: { disabled?: boolean }) {
         const saved = getCookie('selectedModelId')
         const validSaved =
           saved && data.models.some((m: ModelOption) => m.id === saved)
-        setSelectedId(validSaved ? saved : data.defaultModelId)
+        const initialId = validSaved ? saved : data.defaultModelId
+        setSelectedId(initialId)
+        const initialModel = data.models.find(
+          (m: ModelOption) => m.id === initialId
+        )
+        if (initialModel) {
+          onModelChangeRef.current?.({
+            id: initialModel.id,
+            providerId: initialModel.providerId
+          })
+        }
       })
       .catch(() => {
         // Fallback if API fails
@@ -81,14 +101,22 @@ export function ModelSelector({ disabled = false }: { disabled?: boolean }) {
     if (disabled && defaultModelId) {
       setSelectedId(defaultModelId)
       setCookie('selectedModelId', defaultModelId)
+      const model = models.find(m => m.id === defaultModelId)
+      if (model) {
+        onModelChange?.({ id: model.id, providerId: model.providerId })
+      }
     }
-  }, [disabled, defaultModelId])
+  }, [disabled, defaultModelId, models, onModelChange])
 
   const handleModelSelect = (id: string) => {
     if (disabled) return
     setSelectedId(id)
     setCookie('selectedModelId', id)
     setDropdownOpen(false)
+    const model = models.find(m => m.id === id)
+    if (model) {
+      onModelChange?.({ id: model.id, providerId: model.providerId })
+    }
   }
 
   const selectedModel = models.find(m => m.id === selectedId)

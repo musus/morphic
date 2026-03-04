@@ -24,11 +24,14 @@ export function InspectorPanel() {
   const getIconAndTitle = () => {
     switch (part.type) {
       case 'tool-search':
-      case 'tool-askQuestion':
-        const toolName = part.type.replace('tool-', '')
         return {
           icon: <Search size={18} />,
-          title: toolName
+          title: '検索'
+        }
+      case 'tool-askQuestion':
+        return {
+          icon: <Search size={18} />,
+          title: '質問'
         }
       case 'tool-todoWrite':
         return {
@@ -71,7 +74,7 @@ export function InspectorPanel() {
               size="icon"
               onClick={close}
               aria-label="Close panel"
-              tooltipContent="Minimize"
+              tooltipContent="最小化"
             >
               <Minimize2 className="h-4 w-4" />
             </TooltipButton>

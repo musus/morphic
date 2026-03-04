@@ -117,7 +117,7 @@ export function SearchResults({
                 className="text-muted-foreground"
                 onClick={handleViewMore}
               >
-                View {additionalResultsCount} more
+                他 {additionalResultsCount} 件を表示
               </Button>
             </CardContent>
           </Card>

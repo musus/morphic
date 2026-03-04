@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Textarea from 'react-textarea-autosize'
 import { useRouter } from 'next/navigation'
 
@@ -72,6 +72,16 @@ export function ChatPanel({
   const [isInputFocused, setIsInputFocused] = useState(false) // Track input focus
   const { close: closeArtifact } = useArtifact()
   const isLoading = status === 'submitted' || status === 'streaming'
+  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(
+    null
+  )
+
+  const handleModelChange = useMemo(
+    () => (model: { id: string; providerId: string }) => {
+      setSelectedProviderId(model.providerId)
+    },
+    []
+  )
 
   const handleCompositionStart = () => setIsComposing(true)
 
@@ -285,7 +295,7 @@ export function ChatPanel({
                   }}
                 />
               )}
-              <SearchModeSelector />
+              <SearchModeSelector selectedProviderId={selectedProviderId} />
             </div>
             <div className="flex items-center gap-2">
               {messages.length > 0 && (
@@ -301,7 +311,10 @@ export function ChatPanel({
                 </Button>
               )}
               {process.env.NEXT_PUBLIC_MORPHIC_CLOUD_DEPLOYMENT !== 'true' && (
-                <ModelSelector disabled={isGuest} />
+                <ModelSelector
+                  disabled={isGuest}
+                  onModelChange={handleModelChange}
+                />
               )}
               <Button
                 type={isLoading ? 'button' : 'submit'}

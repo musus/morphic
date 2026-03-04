@@ -83,7 +83,7 @@ export function SearchSection({
         searchResults && totalResults > 0 ? (
           <div className="flex items-center gap-2">
             <StatusIndicator icon={Check} iconClassName="text-green-500">
-              {totalResults} results
+              {totalResults} 件の結果
             </StatusIndicator>
             {searchResults.results && searchResults.results.length > 0 && (
               <SourceFavicons results={searchResults.results} maxDisplay={3} />
@@ -171,7 +171,7 @@ export function SearchSection({
             ) : (isLoading && isToolLoading) || isSearching ? (
               <SearchSkeleton />
             ) : searchResults?.results && searchResults.results.length > 0 ? (
-              <Section title="Sources">
+              <Section title="ソース">
                 <SearchResults results={searchResults.results} />
               </Section>
             ) : null}

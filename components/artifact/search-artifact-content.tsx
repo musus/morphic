@@ -59,7 +59,7 @@ export function SearchArtifactContent({ tool }: { tool: ToolPart<'search'> }) {
       )}
 
       {searchResults.results && searchResults.results.length > 0 && (
-        <Section title="Sources">
+        <Section title="ソース">
           <SearchResults results={searchResults.results} displayMode="list" />
         </Section>
       )}

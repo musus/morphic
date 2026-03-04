@@ -49,7 +49,7 @@ export const Section: React.FC<SectionProps> = ({
       icon = <Film size={iconSize} className={iconClassName} />
       type = 'badge'
       break
-    case 'Sources':
+    case 'ソース':
       icon = <FileText size={iconSize} className={iconClassName} />
       type = 'badge'
       break
@@ -121,7 +121,7 @@ export function ToolArgsSection({
       {number && number > 0 && (
         <div className="shrink-0">
           <StatusIndicator icon={Check} iconClassName="text-green-500">
-            {number} results
+            {number} 件の結果
           </StatusIndicator>
         </div>
       )}
